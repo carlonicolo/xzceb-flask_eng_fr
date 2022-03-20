@@ -1,3 +1,8 @@
+"""Module that connect to IBM Language Translator to provide text translation
+languages translation available in this module:
+1- English to French
+2- French to English
+"""
 import json
 from ibm_watson import LanguageTranslatorV3
 from ibm_cloud_sdk_core.authenticators import IAMAuthenticator
@@ -18,20 +23,37 @@ language_translator = LanguageTranslatorV3(
 language_translator.set_service_url(url)
 
 
-def englishToFrench(englishText):
-    #write the code here
-    frenchtranslation = language_translator.translate(
-        text=englishText,
-        model_id='en-fr'
-    ).get_result()
-    
-    return frenchtranslation.get("translations")[0].get("translation")
+def english_to_french(englishtext):
+    """function that take english text and translate it into french text
+    Args:
+        englishText (_type_): _description_
+    Returns:
+        str: frenchText
+    """
+    try:
 
-def frenchToEnglish(frenchText):
-    #write the code here
-    englishtranslation = language_translator.translate(
-        text=frenchText,
-        model_id='fr-en'
-    ).get_result()
-    
-    return englishtranslation.get("translations")[0].get("translation")
+        frenchtranslation = language_translator.translate(
+            text=englishtext,
+            model_id='en-fr'
+        ).get_result()
+        
+        return frenchtranslation.get("translations")[0].get("translation")
+    except ApiException as ex:
+        return ex.message
+
+def french_to_english(frenchtext):
+    """function that take french text and translate it into english text
+    Args:
+        frenchText
+    Returns:
+        str: englishText
+    """
+    try:
+        englishtranslation = language_translator.translate(
+            text=frenchtext,
+            model_id='fr-en'
+        ).get_result()
+        
+        return englishtranslation.get("translations")[0].get("translation")
+    except ApiException as ex:
+        return ex.message
